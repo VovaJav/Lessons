@@ -9,6 +9,9 @@ import android.widget.FrameLayout;
 
 public class CustomMoveLayout extends FrameLayout {
 
+    private float prevX;
+    private float prevY;
+
     private void init() {
 
     }
@@ -22,14 +25,20 @@ public class CustomMoveLayout extends FrameLayout {
             public boolean onTouch(View v, MotionEvent event) {
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
-                        FrameLayout.LayoutParams frameLayout = (LayoutParams) v.getLayoutParams();
-                        frameLayout.gravity = -1;
-                        frameLayout.bottomMargin = 30;
-                        requestLayout();
+                        prevX = event.getX();
+                        prevY = event.getY();
                         break;
                     case MotionEvent.ACTION_UP:
                         break;
                     case MotionEvent.ACTION_MOVE:
+                        float currX = event.getX();
+                        float currY = event.getY();
+                        float deltaX = currX - prevX;
+                        float deltaY = currY - prevY;
+                        FrameLayout.LayoutParams frameLayout = (LayoutParams) v.getLayoutParams();
+                        frameLayout.topMargin += deltaY;
+                        frameLayout.leftMargin += deltaX;
+                        requestLayout();
                         break;
                 }
                 return true;
